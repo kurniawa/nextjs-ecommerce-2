@@ -8,7 +8,7 @@ type FormButtonSubmitProps = {
     className?: string
 } & ComponentProps<"button">
 
-const FormButtonSubmit = ({children, className}: FormButtonSubmitProps) => {
+const FormButtonSubmit:React.FC<FormButtonSubmitProps> = ({children, className}: FormButtonSubmitProps) => {
     const {pending} = useFormStatus();
     return ( <button className={className} type="submit" disabled={pending}>
         {pending && <span className="loading loading-infinity loading-md"></span>}
