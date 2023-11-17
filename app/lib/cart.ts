@@ -18,7 +18,7 @@ export type ShoppingCart = CartWithProduct & {
 
 export const getCart = async ():Promise<ShoppingCart | null> => {
     const localCartId = cookies().get('localCartId')?.value;
-    const cart = localCartId ?
+    let cart = localCartId ?
     await prisma.cart.findUnique({
         where: {id: localCartId},
         include: {CartItem: {include:{product:true}}}
@@ -27,7 +27,13 @@ export const getCart = async ():Promise<ShoppingCart | null> => {
     null
 
     if (!cart) {
-        return null
+        cart = await prisma.cart.findFirst({
+            include: {CartItem: {include:{product:true}}}
+        });
+    }
+
+    if (!cart) {
+        return null;
     }
 
     return {
